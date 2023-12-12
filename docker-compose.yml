@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  static-server:
+    build:
+      context: ./static-server
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+
+  api-server:
+    build:
+      context: ./api-server
+      dockerfile: Dockerfile
+    ports:
+      - "7000:7000"
