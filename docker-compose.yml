@@ -1,16 +1,18 @@
 version: '3'
 
 services:
+  api-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - static-server
+
   static-server:
     build:
       context: ./static-server
       dockerfile: Dockerfile
     ports:
       - "80:80"
-
-  api-server:
-    build:
-      context: ./api-server
-      dockerfile: Dockerfile
-    ports:
-      - "7000:7000"
