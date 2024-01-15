@@ -10,7 +10,8 @@ public class Api {
 
     public static void main(String[] args) {
         Javalin app = Javalin.create();
-        
+
+        app.before(ctx -> ctx.header("Access-Control-Allow-Origin", "*"));
         //QuoteRepo quoteRepository = new QuoteRepo();
 
         app.get("/quotes", Api::getAllQuotes);
