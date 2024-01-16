@@ -1,18 +1,35 @@
 version: '3'
 
 services:
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
   api-server:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    depends_on:
-      - static-server
+    expose:
+      - "8001"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.api-server.rule=Host(`localhost`) && PathPrefix(`/api`)
 
   static-server:
     build:
       context: ./static-server
       dockerfile: Dockerfile
-    ports:
-      - "80:80"
+    expose:
+      - "80"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.static-server.rule=Host(`localhost`)
