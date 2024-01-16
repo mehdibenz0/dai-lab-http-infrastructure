@@ -21,6 +21,8 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.api-server.rule=Host(`localhost`)"
+      - traefik.http.services.api-server.loadbalancer.sticky.cookie=true
+      - traefik.http.routers.api-server.entrypoints=https
     depends_on:
       - static-server
 
