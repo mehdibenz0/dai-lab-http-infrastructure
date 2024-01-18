@@ -59,11 +59,16 @@ docker-compose up -d
 # Step 5: Scalability and load balancing
 
 The deploy section is added to both api-server and static-server services. It specifies the desired number of replicas for each service (in this case, 3). You can adjust the replicas value based on your needs.
-To scale the api-server to 5 instances, you can run:
+To scale up or down the api-server/static-server, you can run:
 ```
-docker-compose up -d --scale api-server=5
-```
+docker-compose up -d --scale api-server= #of services
+docker-compose up -d --scale static-server= #of services
 
+```
+# Step 6: Load balancing with round-robin and sticky sessions
+```
+curl -I -H "Host: localhost" http://localhost/index.html
+```
 on the Traefik dashboard, under HTTP Services, for api-server-dai-lab-http-infrastructure@docker we see 5 and for static-server-dai-lab-http-infrastructure@docker we see 3.
 
 # Optional Step 1: Management UI (Using Portainer)
