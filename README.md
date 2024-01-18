@@ -69,6 +69,7 @@ The docker ps command is the check on the terminal what was launched.
 # Step 6: Load balancing with round-robin and sticky sessions
 ```
 curl -I -H "Host: localhost" http://localhost/index.html
+docker-compose logs -f static-server
 ```
 on the Traefik dashboard, under HTTP Services, for api-server-dai-lab-http-infrastructure@docker we see 5 and for static-server-dai-lab-http-infrastructure@docker we see 3.
 
