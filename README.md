@@ -63,8 +63,9 @@ To scale up or down the api-server/static-server, you can run:
 ```
 docker-compose up -d --scale api-server= #of services
 docker-compose up -d --scale static-server= #of services
-
+docker ps
 ```
+The docker ps command is the check on the terminal what was launched.
 # Step 6: Load balancing with round-robin and sticky sessions
 ```
 curl -I -H "Host: localhost" http://localhost/index.html
