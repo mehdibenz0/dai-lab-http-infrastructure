@@ -5,8 +5,10 @@
 In this step, we built a Docker image containing a static HTTP server using Nginx. The server serves a static Web site with a single page featuring a stylish template obtained from [Free-CSS](https://www.free-css.com/). The Dockerfile is based on the Nginx image and includes instructions to copy the static site content into the image.
 
 To run the Docker image and access the static content, execute the following commands:
+```
 docker build -t dai-lab-http-infrastructure-static-server ./static-server
 docker run -p 8080:80 dai-lab-http-infrastructure-static-server
+```
 Access the static site by opening your browser and navigating to http://localhost:80.
 
 # Step 2: Docker Compose
@@ -56,9 +58,26 @@ docker-compose up -d
 ```
 ![](https://github.com/mehdibenz0/dai-lab-http-infrastructure/blob/main/InsomniaDemo.gif)
 
+# Step 4: Reverse proxy with Traefik
+
+In this step, we introduce a reverse proxy using Traefik to efficiently manage and route requests to the respective static and dynamic web servers.
+- We relay requests coming to "localhost" to the static HTTP server.
+- We relay requests coming to "localhost/api" to the API server.
+Access each server from the browser:
+
+[Static Server](localhost)
+[API Server](localhost/api)
+[Traefik Dashboard](localhost/8080)
+
+
 # Step 5: Scalability and load balancing
 
 The deploy section is added to both api-server and static-server services. It specifies the desired number of replicas for each service (in this case, 3). You can adjust the replicas value based on your needs.
+The feature is one by the following addition to the docker compose:
+```
+deploy:
+ replicas: 3
+```
 To scale up or down the api-server/static-server, you can run:
 ```
 docker-compose up -d --scale api-server= #of services
@@ -94,9 +113,75 @@ Start or stop containers with a simple click on the respective container in the 
 
 In the about.html page, I integrated the Quotes API, it displays the quotes added to the API.
 Moreover, you can enter choose to delete a quote by entering the ID of the chosen quote:
-![alt text]([http://url/to/img.png](https://github.com/mehdibenz0/dai-lab-http-infrastructure/blob/main/API_Integration.png)https://github.com/mehdibenz0/dai-lab-http-infrastructure/blob/main/API_Integration.png)
+![Screenshot](API_Integration.png)
 This was done by the following line in the API's main class:
 ```
 app.before(ctx -> ctx.header("Access-Control-Allow-Origin", "*"));
 ```
+And this is the Script used:
+```
+<script>
+        // Function to make a GET request to the API
+        async function fetchData() {
+            const response = await fetch('http://localhost/api/quotes');
+            const data = await response.json();
+            return data;
+        }
+        // Function to update the page with API results
+        async function updatePage() {
+            const apiResultElement = $('#apiResult');
+            try {
+                const data = await fetchData();
 
+                if (data) {
+                    apiResultElement.html(`
+                        <h2>API Quotes:</h2>
+                        <ul>
+                            ${data.map(quote => `
+                                <li>
+                                    <strong>ID:</strong> ${quote.id}, 
+                                    <strong>Author:</strong> ${quote.author}, 
+                                    <strong>Content:</strong> ${quote.content}
+                                </li>`).join('')}
+                        </ul>
+                        
+                        <p>
+                            Want to delete a Quote?
+                        </p>
+                        <form id="deleteForm" class="mt-4">
+                            <label for="quoteId">Quote ID:</label>
+                            <input type="text" id="quoteId" name="quoteId" required>
+                            <button type="button" onclick="deleteQuote()">Delete</button>
+                        </form>
+                    `);
+                } else {
+                    apiResultElement.html('<p>Error: API data is null</p>');
+                }
+            } catch (error) {
+                apiResultElement.html(`<p>Error: ${error.message}</p>`);
+            }
+        }
+
+        // Function to delete a quote
+        async function deleteQuote() {
+            const quoteId = $('#quoteId').val();
+            try {
+                const response = await fetch(`http://localhost/api/quotes/${quoteId}`, {
+                    method: 'DELETE',
+                });
+
+                if (response.ok) {
+                    console.log(`Quote ${quoteId} deleted successfully.`);
+                } else {
+                    console.error(`Failed to delete quote ${quoteId}.`);
+                }
+                updatePage();
+            } catch (error) {
+                console.error('Error deleting quote:', error.message);
+            }
+        }
+
+        // Periodically update the page
+        setInterval(updatePage, 5000); // Update every 5 seconds
+    </script>
+  ```
