@@ -114,12 +114,13 @@ Start or stop containers with a simple click on the respective container in the 
 In the about.html page, I integrated the Quotes API, it displays the quotes added to the API.
 Moreover, you can enter choose to delete a quote by entering the ID of the chosen quote:
 ![Screenshot](API_Integration.png)
+<img src="[URL](https://github.com/mehdibenz0/dai-lab-http-infrastructure/blob/main/API_Integration.png)" alt="Delete" width="10" height="10">
 This was done by the following line in the API's main class:
 ```
 app.before(ctx -> ctx.header("Access-Control-Allow-Origin", "*"));
 ```
 And this is the Script used:
-```
+```html
 <script>
         // Function to make a GET request to the API
         async function fetchData() {
