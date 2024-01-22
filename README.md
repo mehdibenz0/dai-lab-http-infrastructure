@@ -56,8 +56,10 @@ To start the API server using Docker Compose:
 ```
 docker-compose up -d
 ```
+Here is a video in .gif format that shows some of the API features using Insomnia:
+<br />
 ![](https://github.com/mehdibenz0/dai-lab-http-infrastructure/blob/main/InsomniaDemo.gif)
-
+<br />
 # Step 4: Reverse proxy with Traefik
 
 In this step, we introduce a reverse proxy using Traefik to efficiently manage and route requests to the respective static and dynamic web servers.
