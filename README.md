@@ -89,3 +89,14 @@ Navigate to the "Containers" section to view and manage the running containers.
 Starting/Stopping Containers:
 
 Start or stop containers with a simple click on the respective container in the Portainer interface.
+
+# Optional Step 2: Integration API - static Web site
+
+In the about.html page, I integrated the Quotes API, it displays the quotes added to the API.
+Moreover, you can enter choose to delete a quote by entering the ID of the chosen quote:
+![alt text]([http://url/to/img.png](https://github.com/mehdibenz0/dai-lab-http-infrastructure/blob/main/API_Integration.png)https://github.com/mehdibenz0/dai-lab-http-infrastructure/blob/main/API_Integration.png)
+This was done by the following line in the API's main class:
+```
+app.before(ctx -> ctx.header("Access-Control-Allow-Origin", "*"));
+```
+
